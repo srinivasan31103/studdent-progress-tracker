@@ -57,8 +57,11 @@ export const register = async (req, res) => {
       });
     }
 
+    // Normalize email to lowercase for consistent lookup
+    const normalizedEmail = email.toLowerCase().trim();
+
     // Check if user already exists
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ email: normalizedEmail });
     if (existingUser) {
       return res.status(400).json({
         success: false,
@@ -69,8 +72,8 @@ export const register = async (req, res) => {
     // SECURITY FIX: Always assign 'student' role by default, ignore client input
     // Only admins can create users with other roles via admin panel
     const user = await User.create({
-      name,
-      email,
+      name: name.trim(),
+      email: normalizedEmail,
       password,
       role: 'student'
     });
@@ -114,8 +117,11 @@ export const login = async (req, res) => {
       });
     }
 
+    // Normalize email to lowercase (User schema stores emails in lowercase)
+    const normalizedEmail = email.toLowerCase().trim();
+
     // Find user (include password for comparison)
-    const user = await User.findOne({ email }).select('+password');
+    const user = await User.findOne({ email: normalizedEmail }).select('+password');
 
     if (!user) {
       return res.status(401).json({
