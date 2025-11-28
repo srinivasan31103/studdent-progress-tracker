@@ -77,3 +77,33 @@ export const authorize = (...roles) => {
     next();
   };
 };
+
+// Authorization for student data access - ensures students can only access their own data
+export const authorizeStudentAccess = (req, res, next) => {
+  if (!req.user) {
+    return res.status(401).json({
+      success: false,
+      message: 'Not authenticated'
+    });
+  }
+
+  // Admin and teacher can access any student's data
+  if (req.user.role === 'admin' || req.user.role === 'teacher') {
+    return next();
+  }
+
+  // Students can only access their own data
+  if (req.user.role === 'student') {
+    const requestedStudentId = req.params.id;
+    const userStudentId = req.user.studentId?.toString();
+
+    if (!userStudentId || userStudentId !== requestedStudentId) {
+      return res.status(403).json({
+        success: false,
+        message: 'Access denied. You can only view your own data.'
+      });
+    }
+  }
+
+  next();
+};

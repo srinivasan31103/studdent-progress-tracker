@@ -224,9 +224,24 @@ export const updateProfile = async (req, res) => {
       });
     }
 
-    // Update fields
-    if (name) user.name = name;
-    if (email) user.email = email;
+    // Check email uniqueness if changing email
+    if (email && email.toLowerCase().trim() !== user.email) {
+      const normalizedEmail = email.toLowerCase().trim();
+      const existingUser = await User.findOne({
+        email: normalizedEmail,
+        _id: { $ne: req.user.id }
+      });
+      if (existingUser) {
+        return res.status(400).json({
+          success: false,
+          message: 'Email already in use by another account'
+        });
+      }
+      user.email = normalizedEmail;
+    }
+
+    // Update other fields
+    if (name) user.name = name.trim();
     if (profileImage) user.profileImage = profileImage;
 
     await user.save();

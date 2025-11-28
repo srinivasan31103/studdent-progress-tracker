@@ -7,7 +7,7 @@ import {
   getTaskAnalytics,
   getHabitAnalytics
 } from '../controllers/analyticsController.js';
-import { authenticate, authorize } from '../middleware/auth.js';
+import { authenticate, authorize, authorizeStudentAccess } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -15,7 +15,7 @@ const router = express.Router();
 router.use(authenticate);
 
 router.get('/dashboard', authorize('admin', 'teacher'), getDashboardAnalytics);
-router.get('/student/:id', getStudentAnalytics);
+router.get('/student/:id', authorizeStudentAccess, getStudentAnalytics);
 router.get('/class/:className', authorize('admin', 'teacher'), getClassAnalytics);
 router.get('/tasks', getTaskAnalytics);
 router.get('/habits', getHabitAnalytics);

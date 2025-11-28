@@ -7,7 +7,7 @@ import {
   updateAttendance,
   deleteAttendance
 } from '../controllers/attendanceController.js';
-import { authenticate, authorize } from '../middleware/auth.js';
+import { authenticate, authorize, authorizeStudentAccess } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -15,7 +15,7 @@ const router = express.Router();
 router.use(authenticate);
 
 router.post('/', authorize('admin', 'teacher'), markAttendance);
-router.get('/student/:id', getStudentAttendance);
+router.get('/student/:id', authorizeStudentAccess, getStudentAttendance);
 router.post('/bulk', authorize('admin', 'teacher'), bulkMarkAttendance);
 router.put('/:id', authorize('admin', 'teacher'), updateAttendance);
 router.delete('/:id', authorize('admin'), deleteAttendance);
