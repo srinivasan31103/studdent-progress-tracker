@@ -15,6 +15,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleChange = (e) => {
+    if (error) setError('');
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
@@ -26,15 +27,12 @@ const Login = () => {
     setError('');
     setLoading(true);
 
-    console.log('Attempting login with:', formData.email);
     const result = await login(formData.email, formData.password);
-    console.log('Login result:', result);
 
     if (result.success) {
       navigate('/dashboard');
     } else {
       setError(result.message || 'Login failed');
-      console.error('Login failed:', result);
     }
 
     setLoading(false);
@@ -104,15 +102,6 @@ const Login = () => {
                 Register here
               </Link>
             </p>
-          </div>
-
-          <div className="mt-8 pt-6 border-t border-gray-200">
-            <p className="text-sm text-gray-500 text-center">Demo Credentials:</p>
-            <div className="mt-2 space-y-1 text-xs text-gray-600 text-center">
-              <p>Admin: admin@eduflow.com / admin123</p>
-              <p>Teacher: teacher@eduflow.com / teacher123</p>
-              <p>Student: alice@student.com / student123</p>
-            </div>
           </div>
         </div>
       </div>
