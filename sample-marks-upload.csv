@@ -1,0 +1,6 @@
+studentId,subject,examName,marks,maxMarks,examDate
+REPLACE_WITH_STUDENT_ID,Mathematics,Mid-term Exam,85,100,2024-01-15
+REPLACE_WITH_STUDENT_ID,Science,Mid-term Exam,92,100,2024-01-15
+REPLACE_WITH_STUDENT_ID,English,Mid-term Exam,78,100,2024-01-16
+REPLACE_WITH_STUDENT_ID,History,Mid-term Exam,88,100,2024-01-16
+REPLACE_WITH_STUDENT_ID,Geography,Mid-term Exam,91,100,2024-01-17
