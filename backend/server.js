@@ -45,10 +45,13 @@ app.use(apiLimiter);
 app.use(requestLogger);
 app.use(suspiciousActivityDetector);
 
-// CORS Configuration - More restrictive
-const allowedOrigins = process.env.FRONTEND_URL
-  ? [process.env.FRONTEND_URL]
-  : ['http://localhost:5173', 'http://localhost:5174'];
+// CORS Configuration
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'https://studdent-progress-tracker.vercel.app',
+  process.env.FRONTEND_URL
+].filter(Boolean);
 
 app.use(cors({
   origin: function (origin, callback) {
